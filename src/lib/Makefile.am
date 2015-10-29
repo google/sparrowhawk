@@ -17,7 +17,8 @@ libsparrowhawk_la_SOURCES = io_utils.cc \
                             numbers.cc \
                             protobuf_serializer.cc \
                             rule_system.cc \
-                            string_utils.cc
+                            string_utils.cc \
+			    $(proto_sources)
 libsparrowhawk_la_LDFLAGS = -version-info 0:0:0
 
 items.pb.cc:

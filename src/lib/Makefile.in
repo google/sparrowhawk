@@ -121,10 +121,12 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libsparrowhawk_la_LIBADD =
+am__objects_1 = items.pb.lo links.pb.lo rule_order.pb.lo \
+	semiotic_classes.pb.lo sparrowhawk_configuration.pb.lo
 am_libsparrowhawk_la_OBJECTS = io_utils.lo normalizer_utils.lo \
 	protobuf_parser.lo regexp.lo sentence_boundary.lo \
 	normalizer.lo numbers.lo protobuf_serializer.lo rule_system.lo \
-	string_utils.lo
+	string_utils.lo $(am__objects_1)
 libsparrowhawk_la_OBJECTS = $(am_libsparrowhawk_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -334,7 +336,8 @@ libsparrowhawk_la_SOURCES = io_utils.cc \
                             numbers.cc \
                             protobuf_serializer.cc \
                             rule_system.cc \
-                            string_utils.cc
+                            string_utils.cc \
+			    $(proto_sources)
 
 libsparrowhawk_la_LDFLAGS = -version-info 0:0:0
 all: all-am
@@ -417,14 +420,19 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/io_utils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/items.pb.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/links.pb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/normalizer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/normalizer_utils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numbers.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/protobuf_parser.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/protobuf_serializer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regexp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rule_order.pb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rule_system.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/semiotic_classes.pb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sentence_boundary.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sparrowhawk_configuration.pb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/string_utils.Plo@am__quote@
 
 .cc.o:
