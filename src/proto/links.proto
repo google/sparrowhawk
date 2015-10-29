@@ -1,0 +1,25 @@
+// Defines the relationship between items in the linguistic structure and other
+// parts of the utterance, maintaining hierarchies such as syllables being
+// parents of phonemes, words being parents of syllables etc.
+//
+// Unless otherwise noted, we use global 0-based indices within an utterance.
+// For example, the 20th phoneme in the utterance will have index 19, even
+// though it may be the 1st phoneme in its syllable.
+
+syntax = "proto2";
+
+package speech.sparrowhawk;
+
+message Links {
+  // The index of this entity; mainly useful for debugging purposes.
+  optional int32 own_index = 1;
+
+  // The index of the parent entity of the current entity.
+  optional int32 parent = 2;
+
+  // The index of the first child of the current entity.
+  optional int32 first_child = 3;
+
+  // The index of the last child of the current entity.
+  optional int32 last_child = 4;
+}

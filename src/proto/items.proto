@@ -1,0 +1,214 @@
+syntax = "proto2";
+
+// TODO(rws): Probably phase out links since we are not using it.
+import "links.proto";
+import "semiotic_classes.proto";
+
+package speech.sparrowhawk;
+
+// Message containing the contents for a single token as determined by the
+// tokenizer. Roughly speaking, a token corresponds to a single verbalizable
+// entity, such as a single word, or single semiotic object such as "$15.60".
+message Token {
+  // Describes the kind of entity this token represents.
+  enum Type {
+    // A known word which is present in the lexicon.
+    WORD = 1;
+
+    // A semiotic class.
+    SEMIOTIC_CLASS = 2;
+
+    // Punctuation which is not expected to be pronounced.
+    PUNCT = 3;
+
+    // A word, but requires some further verbalization work.
+    // For example, Thai words with a trailing repetition character.
+    WORD_NEEDS_VERBALIZATION = 4;
+  }
+
+  // General pause duration lengths.
+  enum PauseLength {
+    PAUSE_NONE = 0;    // No pause.
+    PAUSE_SHORT = 1;   // Brief pause, eg. for brackets or quotes.
+    PAUSE_MEDIUM = 2;  // Longer pause, for a comma or similar.
+    PAUSE_LONG = 3;    // Longest pause, for a fullstop or phrase break.
+  }
+
+  // Structural relationships. The children are words.
+  // TODO(rws): Probably phase out links since we are not using it.
+  optional Links links = 1;
+
+  // Optional information about where this token came from in the
+  // original input.
+  // Indices are given in Unicode codepoints (*not* byte indices).
+  optional uint32 start_index = 2;
+  optional uint32 end_index = 3;
+
+  // The name of the token, which is generally the original unnormalized text
+  // the token was generated from.
+  //
+  // Voice Building Note: This field appears on ScriptLine protos that serve as
+  // input to voice building.
+  optional string name = 4;
+
+  // Basic type of the token (see enum comments).
+  //
+  // Voice Building Note: This field appears on ScriptLine protos that serve as
+  // input to voice building.
+  optional Type type = 5;
+
+  // The wordid of the token, when a single one is known.
+  // Set when type == WORD
+  optional string wordid = 6;
+
+  // If the token is a word, this represents the regular lower-cased spelling of
+  // that word.
+  optional string spelling = 7;
+
+  // If true, this token is a phrase break.
+  optional bool phrase_break = 8;
+
+  // Indicates a pause of given length, in seconds.  Used when pause given from
+  // markup.
+  // Currently unused.
+  optional float pause_duration = 9;
+
+  // If set, indicates a general length of pause that should be introduced
+  // for synthesis. For example, a fullstop would generally generate
+  // a longer pause than a comma.
+  // Currently unused.
+  optional PauseLength pause_length = 10 [default = PAUSE_NONE];
+
+  // This is used to store spelling with stress mark produced
+  // by stress assigner or provided in input text.
+  // Currently unused.
+  optional string spelling_with_stress = 11;
+
+  // If true, don't verbalize this token. Used to skip tokens that are part of a
+  // multi-token semiotic class, or bypass homograph resolution when explicit
+  // wordids are provided.
+  optional bool skip = 12;
+
+  // Is true if a space follows this token. E.g., after tokenization in Chinese/Japanese.
+  // Currently unused.
+  optional bool next_space = 13;
+
+  // All the following (fields in the range [14-27]) are used when
+  // the token represents a semiotic class. In such a case, one of these
+  // is filled by the output from the classifier/parser stage.
+  // Alternatively, if part of the input was given as markup, it will
+  // be copied from the input to these fields.
+  optional Cardinal cardinal = 14;
+  optional Ordinal ordinal = 15;
+  optional string digit = 16;
+  optional Decimal decimal = 17;
+  optional Fraction fraction = 18;
+  optional Time time = 19;
+  optional Measure measure = 20;
+  optional Decimal percent = 21;
+  optional Date date = 22;
+  optional Telephone telephone = 23;
+  optional Money money = 24;
+  optional Electronic electronic = 25;
+  optional string verbatim = 26;
+  optional string letters = 27;
+
+  // Tokens defined by things they connect, for example "-" in "Mon-Fri",
+  // ":" in "1:1", etc.
+  optional Connector connector = 28;
+
+  // Abbreviations, intended for languages where they may inflect depending
+  // on case etc.
+  optional Abbreviation abbreviation = 29;
+
+  // Indices of the first and last words.
+  optional int32 first_daughter = 30;
+
+  optional int32 last_daughter = 31;
+
+  extensions 1000 to max;
+}
+
+// A single word
+message Word {
+  // Structural relationships. The parent items are tokens.
+  // TODO(rws): Probably phase out links since we are not using it.
+  optional Links links = 1;
+
+  // The id of the word, predominantly used as a key into the lexicon.
+  optional string id = 2;
+
+  // The conventional spelling of the word.
+  // There can be several spellings matching one id in the lexicon
+  // (e.g. colour, color correspond to the same wordid) and vice versa
+  // (spelling "project" maps to ids "project_nou" and "project_vrb").
+  optional string spelling = 3;
+
+  // If set, indicates the length of pause that should be generated for
+  // this word, in seconds. Only applies to the special word "sil".
+  // Currently unused.
+  optional float pause_length = 4;
+
+  // True when the prosodic_features have specified that there should (value
+  // true) or should not (value false) be a pause just after this word, either
+  // because contains_pause was specified in an utterance in which this was the
+  // penultimate word, or because precedes_pause was specified in an utterance
+  // in which this was the last word.
+  // Currently unused.
+  optional bool precedes_pause = 5;
+
+  // Parent token
+  optional int32 parent = 6;
+
+  extensions 1000 to max;
+
+}
+
+// A single utterance's linguistic structure
+message LinguisticStructure {
+  // ID uniquely identifying this utterance. If used in asynchronous mode
+  // the utterance IDs can be used to match multiply emitted utterances
+  // generated from a single source. 64-bit integer is used to
+  // accommodate utterance ID as a timestamp.
+  optional int64 id = 1;
+  optional string input = 2;  // The original sentence.
+  repeated Token tokens = 3;
+  repeated Word words = 4;
+
+  extensions 1000 to max;
+}
+
+// An utterance
+message Utterance {
+  // An arbitrary identifier used to identify the utterance for debugging
+  // purposes. The controller assigns this id internally when it creates an
+  // utterance, and the id is unique (with high probability) within the process.
+  // Currently unused.
+  optional uint64 id = 1;
+
+  // If loaded from file, the filename (usually without a path). Mainly intended
+  // as a human-readable identifier for debugging purposes.
+  // Currently unused.
+  optional string filename = 2;
+
+  // This field can be mutated by various text pre-processing streams, such as
+  // character segmenters and text filters.
+  // Currently unused.
+  optional string sentence = 3;
+
+  // Copy of the original sentence that is guaranteed not to be changed by the
+  // pipeline.
+  // Currently unused.
+  optional string original_sentence = 4;
+
+  // If segmentation was applied on the original sentences, the following field
+  // will contain the results of the segmentation. Each string corresponds to
+  // an individual sentence.
+  // Currently unused.
+  repeated string segmenter_output = 5;
+
+  // Linguistic streams, words, tokens etc.
+  optional LinguisticStructure linguistic = 6;
+
+  extensions 1000 to max;
+}

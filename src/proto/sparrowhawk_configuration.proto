@@ -1,0 +1,21 @@
+// The SparrowhawkConfiguration stores information about the grammars, and rules
+// to run.
+
+syntax = "proto2";
+
+package speech.sparrowhawk;
+
+message SparrowhawkConfiguration {
+  optional string tokenizer_grammar = 1;  // Tokenizer-classifier.
+
+  optional string verbalizer_grammar = 2;
+
+  // Regular expression for sentence boundary detector. This is a set
+  // of possible end-of-sentence markers.
+  optional string sentence_boundary_regexp = 3;
+
+  // Optional file specifying tokens that end in a possible end-of-sentence
+  // marker that should *not* usually induce an end-of-sentence decision
+  // e.g. “Mr.”
+  optional string sentence_boundary_exceptions_file = 4;
+}

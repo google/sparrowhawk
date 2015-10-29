@@ -1,0 +1,250 @@
+// Protocol buffers describing the various types of semiotic classes
+// (cardinals, measures and so on) that can be passed to the
+// synthesizer as part of public markup defined in
+// tts_markup.proto in this directory. Each protocol buffer
+// specifies unambiguously how the input is to be verbalized.
+//
+// The use of deprecated fields may cause verbalization to fail.
+
+syntax = "proto2";
+
+package speech.sparrowhawk;
+
+// A number that should be read as an cardinal, e.g. "one". The input
+// is specified by a string and verbalization via optional
+// morphosyntactic features for gender, case etc.
+message Cardinal {
+  // A string of digits optionally prefixed with '-'.
+  required string integer = 1;
+  optional string morphosyntactic_features = 2;
+  // Preserve order from what was given in the text
+  optional bool preserve_order = 3;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual situations, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 4;
+  repeated string field_order = 5;
+}
+
+// A number that should be read as an ordinal, e.g. "first". The input
+// is specified by a string and optional
+// morphosyntactic features for gender, case etc.
+message Ordinal {
+  required string integer = 1;
+  optional string morphosyntactic_features = 2;
+  optional bool preserve_order = 3;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 4;
+  repeated string field_order = 5;
+}
+
+// A number that should be read as a fraction, e.g. "three
+// quarters". The input is specified as a separate numerator and
+// denominator.
+message Fraction {
+  optional string integer_part = 1;
+  required string numerator = 2;
+  required string denominator = 3;
+  optional int32 style = 4 [deprecated = true];
+  optional string morphosyntactic_features = 5;
+  optional bool preserve_order = 6;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 7;
+  optional bool negative = 8;
+  repeated string field_order = 9;
+}
+
+// A time, given as hours, minutes and seconds. 'style' controls how
+// the time should be spoken. For example "hours=13, minutes=15" could
+// be "one fifteen pm", "thirteen fifteen", "a quarter past one"
+// etc. The styles are defined in the language specific verbalizer.
+// 'zone' contains an optional time zone which is verbalized letter
+// by letter, eg. PST, GMT etc.
+message Time {
+  optional /* required */ int32 hours = 1;
+  optional /* required */ int32 minutes = 2;
+  optional int32 seconds = 3 [deprecated = true];
+  // Do not set to false.
+  optional bool speak_period = 4;
+  optional string suffix = 5 [deprecated = true];
+  optional int32 style = 6 [deprecated = true];
+  optional string zone = 7;
+  optional string morphosyntactic_features = 9;
+  optional bool preserve_order = 10;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 11;
+  repeated string field_order = 12;
+}
+
+// A number read out with a decimal point. For example "34.45" is
+// integer_part: "34" fraction: "45"
+// -23.64 is integer_part: "23" fraction: "64" negative: true
+// Optional field for exponent to handle cases like
+// -3.24E29
+// The quantity field is intended to be used if exponent isn't to represent
+// quantities expressed as words --- e.g. 2.3 billion. This is on analogy of
+// what is done in Money, except that it is really more general than Money, and
+// should be available to other classes that use Decimal.
+message Decimal {
+  // Set to true or leave unset, do not set to false.
+  optional bool negative = 1;
+  optional /* required */ string integer_part = 2;
+  optional string fractional_part = 3;
+  optional string quantity = 4;
+  optional string exponent = 5;
+  optional int32 style = 6 [deprecated = true];
+  optional string morphosyntactic_features = 7;
+  optional bool preserve_order = 8;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 9;
+  repeated string field_order = 10;
+}
+
+// A measure, e.g. 6 feet, 9 meters etc. units are the units of the
+// measure e.g. "miles"; definitions of all legal units are in a fixed
+// list in the text norm params.
+//
+// Cardinal is to make it easier to incorporate East Asian counter words as
+// measures.  The vast majority of the time one sees these they are after an
+// integer, so this just allows one to avoid the excess baggage of using decimal
+// or fraction markup. More generally for real measures in other languages this
+// could be useful for similar reasons. BTW, The motivation for treating counter
+// words as measures is that in languages that have them, more familiar measures
+// are treated as a subset of counter words, in that one never gets a counter
+// word AND a measure.
+message Measure {
+  // Set one of the following three.
+  optional Decimal decimal = 1;
+  optional Fraction fraction = 2;
+  optional Cardinal cardinal = 3;
+  optional string units = 4;
+  optional int32 style = 5 [deprecated = true];
+  optional string morphosyntactic_features = 6;
+  optional bool preserve_order = 7;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 8;
+  repeated string field_order = 9;
+}
+
+// A date, give in day, month year. 'style' could be used to control,
+// e.g. whether day=4, month=5, year=1997 is said "fourth of may nineteen ninety
+// seven", or "may the fourth nineteen ninety seven" 'era' is for era indicators
+// such as "CE", "BCE", "AD", "CE" etc.
+message Date {
+  optional string weekday = 1;
+  optional string day = 2;
+  // Set at least one of month and year
+  optional string month = 3;
+  optional string year = 4;
+  optional int32 style = 5 [deprecated = true];
+  optional string text = 6 [deprecated = true];
+  optional bool short_year = 7 [deprecated = true];
+  optional string era = 8;
+  optional string morphosyntactic_features = 9;
+  optional bool preserve_order = 10;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 11;
+  repeated string field_order = 12;
+}
+
+// An amount of money, eg. $12.50, £15, etc.
+// style could be used to control how it is read. for the example $12.50:
+// 1: "twelve dollars and fifty cents"
+// 2: "twelve dollars fifty"
+// 3: "twelve united states dollars and fifty cents"
+message Money {
+  required Decimal amount = 1;   // The amount of money
+  optional int64 quantity = 2;   // Optional million/billion etc, as an integer
+  // lowercase ISO4217 currency code, e.g. "usd"
+  // List of minimally supported set of currencies:
+  // kestrel_grammar/verbalize/universal/money_definition.txt
+  required string currency = 3;
+  optional int32 style = 4  [deprecated = true];
+  optional string morphosyntactic_features = 5;
+  optional bool preserve_order = 6;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 7;
+  repeated string field_order = 8;
+}
+
+// A telephone number.
+// NB. There should always be at least one number_part.
+message Telephone {
+  // Country code (excluding '+'), eg. 44 for UK.
+  optional string country_code = 1;
+  // Parts of the phone number
+  repeated string number_part = 2;
+  // The internal extension.
+  optional string extension = 3;
+
+  // if 1, number is read digit by digit.
+  // if 2, digits are grouped ("double 2" etc)
+  optional int32 style = 4 [deprecated = true];
+  optional string morphosyntactic_features = 5;
+  optional bool preserve_order = 6;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 7;
+  repeated string field_order = 8;
+}
+
+// Electronic items such as URLs, email addresses, etc.
+// The full schema for URLs, which email addresses can effectively
+// be seen as a subset of, is:
+// protocol://username:password@domain:port/path?query_string#fragment_id
+// Hence populating just username and domain will read as an email address.
+message Electronic {
+  optional string protocol = 1;
+  optional string username = 2;
+  // Only used if username is set.
+  optional string password = 3;
+  optional string domain = 4;
+  optional int32 port = 5;
+  optional string path = 6;
+  optional string query_string = 7;
+  optional string fragment_id = 8;
+  optional string morphosyntactic_features = 9;
+  optional bool preserve_order = 10;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 11;
+  repeated string field_order = 12;
+}
+
+// A token that connects two other tokens, such as the : in 1:1 or
+// the x in 4x3.
+message Connector {
+  // The type of connector this is, eg. "ratio", "range", etc.
+  optional string type = 1;
+  optional string morphosyntactic_features = 2;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 3;
+}
+
+// Abbreviation which will be expanded using morphosyntactic features.
+message Abbreviation {
+  required string text = 1;
+  optional string morphosyntactic_features = 2;
+  // A string to indicate switching to a separate language, esp. useful for
+  // bilingual languages, e.g. when switching between English and Hindi
+  // depending on context.
+  optional string code_switch = 3;
+}

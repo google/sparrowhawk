@@ -1,0 +1,35 @@
+// Definition of ordering of rules to be applied. Each rule, and an optional
+// pushdown-transducer parenthesis set, is applied (composed) to the input in
+// the order specified.
+//
+// If a reduplication rule (also a Thrax target) is supplied, then that will
+// optionally copy any matching input. This is most useful in cases where it is
+// desirable to copy the entire to-be-verbalized token. For example, with money
+// where one can copy an entire money token, and then read the major currency
+// off the first copy and the minor currency off the second.  See
+//
+// Ebden, Peter and Sproat, Richard. 2015. The Kestrel TTS text normalization
+// system. Natural Language Engineering, Issue 03, pp 333-353.
+//
+// for further discussion.
+//
+// See the Thrax documentation at
+// http://www.openfst.org/twiki/bin/view/GRM/ThraxQuickTour for discussion of
+// PDTs and (coming soon) MPTDs.
+
+syntax = "proto2";
+
+package speech.sparrowhawk;
+
+message Rule {
+  required string main = 1;  // Main normalization rule.
+  optional string parens = 2;  // Optional PDT parens.
+  optional string assignments = 3;  // Optional MPDT assignments.
+  optional string redup = 4;  // Optional reduplication rule.
+};
+
+message Grammar {
+  required string grammar_file = 1;
+  required string grammar_name = 2;  // Name for this grammar.
+  repeated Rule rules = 3;
+};
