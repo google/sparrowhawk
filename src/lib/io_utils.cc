@@ -26,16 +26,19 @@ namespace sparrowhawk {
 string IOStream::LoadFileToString(const string &filename) {
   ifstream strm(filename.c_str(), std::ios_base::in);
   if (!strm) {
-    LoggerFatal("Error loading from file %s", filename.c_str());
+    LoggerFatal("Error opening file %s", filename.c_str());
   }
   strm.seekg(0, strm.end);
   int length = strm.tellg();
   strm.seekg(0, strm.beg);
-  std::unique_ptr<char> data;
-  data.reset(new char[length + 1]);
+  std::unique_ptr<char[]> data(new char[length + 1],
+                               std::default_delete<char[]>());
   strm.read(data.get(), length);
+  if (strm.fail()) {
+    LoggerFatal("Error loading from file %s", filename.c_str());
+  }
   data.get()[length] = 0;
-  return string(data.get());
+  return string(data.get(), length);
 }
 
 }  // namespace sparrowhawk
