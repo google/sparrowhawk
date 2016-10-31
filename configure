@@ -637,6 +637,8 @@ am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
 PROTOC
+HAVE_BIN_FALSE
+HAVE_BIN_TRUE
 CXXCPP
 CPP
 OTOOL64
@@ -768,6 +770,7 @@ enable_fast_install
 with_gnu_ld
 with_sysroot
 enable_libtool_lock
+enable_bin
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1411,6 +1414,7 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
+  --enable-bin            enable command-line binaries
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -15344,7 +15348,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-ac_config_files="$ac_config_files Makefile src/Makefile src/include/Makefile src/lib/Makefile src/proto/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/include/Makefile src/lib/Makefile src/proto/Makefile src/bin/Makefile"
 
 
 
@@ -15415,6 +15419,22 @@ else
 
 fi
 
+
+
+# Check whether --enable-bin was given.
+if test "${enable_bin+set}" = set; then :
+  enableval=$enable_bin;
+else
+  enable_bin=yes
+fi
+
+ if test "x$enable_bin" != xno; then
+  HAVE_BIN_TRUE=
+  HAVE_BIN_FALSE='#'
+else
+  HAVE_BIN_TRUE='#'
+  HAVE_BIN_FALSE=
+fi
 
 
 # Extract the first word of "protoc", so it can be a program name with args.
@@ -15629,6 +15649,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCXX_TRUE}" && test -z "${am__fastdepCXX_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCXX\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_BIN_TRUE}" && test -z "${HAVE_BIN_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_BIN\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
@@ -16585,6 +16609,7 @@ do
     "src/include/Makefile") CONFIG_FILES="$CONFIG_FILES src/include/Makefile" ;;
     "src/lib/Makefile") CONFIG_FILES="$CONFIG_FILES src/lib/Makefile" ;;
     "src/proto/Makefile") CONFIG_FILES="$CONFIG_FILES src/proto/Makefile" ;;
+    "src/bin/Makefile") CONFIG_FILES="$CONFIG_FILES src/bin/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

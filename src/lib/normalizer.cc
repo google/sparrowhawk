@@ -98,7 +98,7 @@ bool Normalizer::NormalizeAndShowLinks(
 bool Normalizer::TokenizeAndClassifyUtt(Utterance *utt,
                                         const string &input) const {
   typedef fst::StringCompiler<fst::StdArc> Compiler;
-  Compiler compiler(Compiler::BYTE);
+  Compiler compiler(fst::StringTokenType::BYTE);
   MutableTransducer input_fst, output;
   if (!compiler(input, &input_fst)) {
     LoggerError("Failed to compile input string \"%s\"", input.c_str());
@@ -131,6 +131,8 @@ bool Normalizer::VerbalizeUtt(Utterance *utt) const {
   for (int i = 0; i < utt->linguistic().tokens_size(); ++i) {
     Token *token = utt->mutable_linguistic()->mutable_tokens(i);
     string token_form = ToString(*token);
+    token->set_first_daughter(-1);  // Sets to default unset.
+    token->set_last_daughter(-1);   // Sets to default unset.
     // Add a single silence for punctuation that forms phrase breaks. This is
     // set via the grammar, though ultimately we'd like a proper phrasing
     // module.

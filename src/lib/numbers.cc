@@ -14,6 +14,7 @@
 #include <sparrowhawk/numbers.h>
 
 #include <errno.h>
+#include <stdlib.h>
 #include <string>
 using std::string;
 

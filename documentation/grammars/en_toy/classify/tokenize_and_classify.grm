@@ -1,0 +1,20 @@
+import 'cardinal.grm' as c;
+import 'date.grm' as d;
+import 'measure.grm' as M;
+import 'money.grm' as m;
+import 'punctuation.grm' as p;
+import 'time.grm' as t;
+import '../util.grm' as u;
+import 'word.grm' as w;
+
+types = c.CARDINAL | d.DATE | M.MEASURE | m.MONEY | w.WORD | t.TIME;
+
+token = u.I["tokens { "] types u.I[" }"];
+
+token_plus_punct = (p.PUNCT u.I[" "])* token (u.I[" "] p.PUNCT)*;
+
+# Collection of all possible semiotic classes, including ordinary words.
+
+export TOKENIZE_AND_CLASSIFY =
+  Optimize[token_plus_punct (" " token_plus_punct)*]
+;

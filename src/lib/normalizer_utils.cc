@@ -58,12 +58,13 @@ Word* Normalizer::AddWord(Utterance* utt,
                           const string& spelling) const {
   Word* word = utt->mutable_linguistic()->add_words();
   int word_index = utt->linguistic().words_size() - 1;
-  if (!token->has_first_daughter()) {
+  if (!token->has_first_daughter() || token->first_daughter() == -1) {
     token->set_first_daughter(word_index);
   }
   token->set_last_daughter(word_index);
   word->set_parent(TokenIndex(utt, token));
   word->set_spelling(spelling);
+  word->set_id(spelling);
   return word;
 }
 

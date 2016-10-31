@@ -1,0 +1,18 @@
+import '../byte.grm' as b;
+import '../util.grm' as u;
+
+# A verbatim grammar is needed as a backoff since if for some reason
+# verbalization fails, it backs off to reading the string as the literal
+# sequence of characters.
+
+q = u.q;
+# Used to allow for different numbers of spaces coming out of the serializer.
+s = u.s;
+
+char = b.kNotSpace u.I["_character"];
+
+chars = char (u.I[" "] char)*;
+
+# Removes the markup (allowing for various spacing possibilities in the
+# serialization) and verbalizes the remainder.
+export VERBATIM = Optimize[u.D["verbatim:" s q] chars u.D[q]];

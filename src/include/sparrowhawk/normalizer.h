@@ -86,6 +86,7 @@ class Normalizer {
 
   // normalizer_utils.cc
   // As in Kestrel, adds a phrase and silence.
+  // TODO(rws): Possibly remove this since it is actually not being used.
   void AddPhraseToUtt(Utterance *utt) const { AddPhraseToUtt(utt, false); }
 
   // normalizer_utils.cc

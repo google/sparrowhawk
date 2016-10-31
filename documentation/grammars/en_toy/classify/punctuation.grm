@@ -1,0 +1,25 @@
+import '../util.grm' as u;
+
+# The trick of inserting this material and then replacing the "[PUNCT]" with the
+# relevant punctuation symbols works because of the way that Replace replaces
+# the arcs in the replacement fst.
+
+# phrase_break: true sets it so that a silence (sil) will be inserted.
+
+medium =
+  u.I["tokens { name: \"[PUNCT]\" pause_length: "
+      "PAUSE_MEDIUM phrase_break: true type: PUNCT }"]
+;
+
+long =
+  u.I["tokens { name: \"[PUNCT]\" pause_length: "
+      "PAUSE_LONG phrase_break: true type: PUNCT }"]
+;
+
+medium_punct = "," | ";" | "(" | ")";
+long_punct = "." | "!" | "?" | ":";
+
+export PUNCT = Optimize[
+   Replace["[ROOT][PUNCT]", medium, medium_punct]
+ | Replace["[ROOT][PUNCT]", long, long_punct]]
+;

@@ -1,0 +1,38 @@
+import '../byte.grm' as b;
+import '../util.grm' as u;
+
+# English cardinal and ordinal number names are FSTs that are trained using the
+# algorithm reported in:
+#
+# Kyle Gorman and Richard Sproat. "Minimally supervised models for number
+# normalization." Transactions of the Association for Computational Linguistics. 2016.
+cardinal = LoadFst['CARDINAL_NUMBER_NAME'];
+
+ordinal = LoadFst['ORDINAL_NUMBER_NAME'];
+
+d = b.kDigit;
+
+digit = d @ cardinal;
+
+export CARDINAL = cardinal;
+
+export ORDINAL = ordinal;
+
+export DIGITS = Optimize[digit (u.I[" "] digit)*];
+
+q = u.q;
+
+# Used to allow for different numbers of spaces coming out of the serializer.
+s = u.s;
+
+# Removes the markup (allowing for various spacing possibilities in the
+# serialization) and verbalizes the remainder.
+cardinal_markup =
+  u.D["cardinal" s "{" s]
+  u.D["integer:" s q]
+  cardinal
+  u.D[q]
+  u.D[s "}"]
+;
+
+export CARDINAL_MARKUP = Optimize[cardinal_markup];

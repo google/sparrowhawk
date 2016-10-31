@@ -1,0 +1,73 @@
+import '../byte.grm' as b;
+import '../util.grm' as u;
+import 'numbers.grm' as n;
+
+# quotation mark
+q = u.q;
+
+# Used to allow for different numbers of spaces coming out of the serializer.
+s = u.s;
+
+month = b.kAlpha+;
+
+day = n.ORDINAL;
+
+d = b.kDigit;
+D = b.kDigit - "0";
+
+two_digit =
+    ((D d) @ n.CARDINAL)
+  | ("0" : "oh ") (D @ n.CARDINAL)
+  | ("00" : "hundred")
+;
+
+# Years are not read as cardinals, generally:
+year =
+    (("19" @ n.CARDINAL) u.I[" "] two_digit)
+  | (("20" @ n.CARDINAL) u.I[" "] ((D d) @ two_digit))
+  | (("200" d) @ n.CARDINAL)
+;
+
+# Remove these if they occur
+
+field = (b.kAlpha | "_")+;
+preserve_order = "preserve_order:" s "true" s;
+field_order = "field_order:" s q field q s;
+field_order_specs = (preserve_order | field_order)*;
+
+# Verbalization for MDY
+mdy =
+  u.D["date" s "{" s]
+  u.D["month:" s q]
+  month
+  u.I[" the "]
+  u.D[q s]
+  u.D["day:" s q]
+  day
+  u.I[" "]
+  u.D[q s "year:" s q]
+  year
+  u.D[q s]
+  u.D[field_order_specs]?
+  u.D["}"]
+;
+
+# Verbalization for DMY
+dmy =
+  u.D["date" s "{" s]
+  u.I["the "]
+  u.D["day:" s q]
+  day
+  u.D[q s]
+  u.I[" of "]
+  u.D["month:" s q]
+  month
+  u.I[" "]
+  u.D[q s "year:" s q]
+  year
+  u.D[q s]
+  u.D[field_order_specs]?
+  u.D["}"]
+;
+
+export DATE = Optimize[mdy | dmy];

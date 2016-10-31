@@ -88,7 +88,7 @@ bool SentenceBoundary::EvaluateCandidate(const string &input_text,
   // Gets the previous sentence and the marker, minus any trailing whitespace.
   string previous = StripWhitespace(input_text + marker);
   int previous_length = previous.size();
-  for (const auto exception : sentence_boundary_exceptions_) {
+  for (const auto &exception : sentence_boundary_exceptions_) {
     int length = exception.size();
     if (length <= previous_length &&
         previous.substr(previous_length - length, length) == exception)

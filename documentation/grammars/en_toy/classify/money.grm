@@ -1,0 +1,34 @@
+import '../byte.grm' as b;
+import '../util.grm' as u;
+
+d = b.kDigit;
+q = u.q;
+currencies = StringFile['money.tsv'];
+
+# Maps input of the form
+#
+# $2.50
+#
+# into
+#
+# money { currency: "usd" amount { integer_part: "2" fractional_part: "50"} } }
+#
+# The fractional part is optional.
+
+money =
+  u.I["money { "]
+  u.I["currency: " q]
+  currencies
+  u.I[q]
+  u.I[" amount { "]
+  u.I["integer_part: " q]
+  d+
+  u.I[q]
+ (u.D["."]
+  u.I[" fractional_part: " q]
+  d{2}
+  u.I[q])?
+  u.I["} }"]
+;
+
+export MONEY = Optimize[money];

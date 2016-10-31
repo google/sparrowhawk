@@ -1,0 +1,36 @@
+import '../byte.grm' as b;
+import '../util.grm' as u;
+
+d = b.kDigit;
+q = u.q;
+
+# Maps input of the form
+#
+# 3:30
+#
+# into
+#
+# time { hour: 3 minute: 30 }
+#
+# Hours and minutes fields are defined as ints, so here we don't use quotes.
+
+
+hour =
+    "0"? d
+  | "1" d
+  | "2" ("0" | "1" | "2" | "3")
+;
+
+minute = ("0" | "1" | "2" | "3" | "4" | "5")  d;
+
+time =
+  u.I["time { "]
+  u.I["hours: "]
+  hour
+  u.D[":"]
+  u.I[" minutes: "]
+  minute
+  u.I["}"]
+;
+
+export TIME = Optimize[time];

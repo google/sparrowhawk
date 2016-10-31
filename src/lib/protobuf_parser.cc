@@ -260,7 +260,7 @@ bool ProtobufParser::RecordFieldOrder(Message *message,
 // Used to work out the length of a utf8 string in Unicode chars
 // (instead of just bytes).
 struct CountUtf8NonContinuationChars {
-  bool operator()(char c) const { return c < 192; }
+  bool operator()(unsigned char c) const { return c < 192; }
 };
 
 void ProtobufParser::UpdateTokenIndices(Token *token, bool set_semiotic_class,

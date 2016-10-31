@@ -1,0 +1,123 @@
+import '../byte.grm' as b;
+import '../util.grm' as u;
+import 'numbers.grm' as n;
+
+q = u.q;
+
+# Used to allow for different numbers of spaces coming out of the serializer.
+s = u.s;
+
+d = b.kDigit;
+
+currencies = StringFile['money.tsv'];
+
+# Simple currency amounts such as:
+# money { amount { integer_part: "3"} currency: "usd" }
+
+sigstar = b.kBytes*;
+
+# Rules to insert "_maj" and "_min" at the end of the currency terms.
+ins_maj = CDRewrite[u.I["_maj"], "", "[EOS]", sigstar];
+ins_min = CDRewrite[u.I["_min"], "", "[EOS]", sigstar];
+
+# Removes the markup (allowing for various spacing possibilities in the
+# serialization) and verbalizes the remainder.
+money_whole =
+  u.D["money" s "{" s ""]
+  u.D["amount" s "{" s ""]
+  u.D["integer_part:" s q]
+  n.CARDINAL
+  u.D[q]
+  u.D[s "}" s]
+  u.D["currency: " q]
+  u.I[" "]
+  (ins_maj @ currencies)
+  u.D[q]
+  u.D[s "}"]
+;
+
+del_zero = CDRewrite[u.D["0"], "[BOS]", "", sigstar];
+
+# money { amount { integer_part: "3" fractional_part: "50"} currency: "usd" }
+# Here wa assume that the input has been reduplicated (see REDUP), and then on
+# the lefthand side we delete the minor currency and on the righthand side the
+# major currency. The reduplication is done IN CODE (see
+# RuleSystem::ApplyRules() in rule_system.cc).
+#
+# Removes the markup (allowing for various spacing possibilities in the
+# serialization) and verbalizes the remainder.
+
+money_all =
+  u.D["money" s "{" s]
+  u.D["amount" s "{" s]
+  u.D["integer_part:" s q]
+  n.CARDINAL
+  u.D[q]
+  u.D[" fractional_part:" s q]
+  u.D[d+]
+  u.D[q]
+  u.D[s "}" s]
+  u.D["currency:" s q]
+  u.I[" "]
+  (ins_maj @ currencies)
+  u.D[q]
+  u.D[s "}" s]
+  u.I[" and "]
+  u.D["money" s "{" s]
+  u.D["amount" s "{" s]
+  u.D["integer_part:" s q]
+  u.D[d+]
+  u.D[q]
+  u.D[s "fractional_part:" s q]
+  (del_zero @ n.CARDINAL)
+  u.D[q]
+  u.D[s "}" s]
+  u.D["currency:" s q]
+  u.I[" "]
+  (ins_min @ currencies)
+  u.D[q]
+  u.D[s "}"]
+;
+
+# Singularize after "one" (as in measures).
+
+singulars =
+   ("dollars" : "dollar")
+ | ("cents" : "cent")
+ | ("pounds" : "pound")
+ | ("pence" : "penny")
+ | ("euros" : "euro")
+;
+
+singularize =
+  CDRewrite[singulars, "[BOS]one " | "and one ", "", sigstar]
+;
+
+export MONEY =
+   Optimize[
+    (money_whole | money_all)
+   @ singularize]
+;
+
+# keep one space
+ks = s : " ";
+
+# Pattern that matches the currency expression to be reduplicated.
+redup =
+  "money" ks "{" ks
+  "amount" ks "{" ks
+  "integer_part:" ks q
+  d+
+  q
+  ks "fractional_part:" ks q
+  d+
+  q
+  ks "}" ks
+  "currency:" ks q
+  # Match to ins_maj then project back to the 3-letter code.
+  Project[ins_maj @ currencies, 'input']
+  q
+  ks "}"
+;
+
+export REDUP = redup;

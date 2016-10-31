@@ -16,6 +16,7 @@ AC_CONFIG_FILES([
   src/include/Makefile
   src/lib/Makefile
   src/proto/Makefile
+  src/bin/Makefile
 ])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -49,6 +50,15 @@ AC_CHECK_HEADER([re2/re2.h], [],
 AC_CHECK_HEADER([google/protobuf/message.h], [],
  [AC_MSG_ERROR([google/protobuf/message.h header not found])]
 )
+
+AC_ARG_ENABLE(
+	[bin],
+	[AS_HELP_STRING(
+		[--enable-bin],
+		[enable command-line binaries])],
+	[],
+	[enable_bin=yes])
+AM_CONDITIONAL([HAVE_BIN], [test "x$enable_bin" != xno])
 
 AC_CHECK_PROG([PROTOC], [protoc], [protoc])
 AS_IF([test "x${PROTOC}" == "x"],

@@ -1,0 +1,36 @@
+import '../byte.grm' as b;
+import '../util.grm' as u;
+
+d = b.kDigit;
+q = u.q;
+measures = StringFile['measure.tsv'];
+
+# Maps input of the form
+#
+# 2.5kg
+#
+# into
+#
+# measure { decimal { integer_part: "2" fractional_part: "5" } units: "kilogram" }
+#
+# The fractional part is optional.
+
+measure =
+  u.I["measure { "]
+  u.I[" decimal { "]
+  u.I["integer_part: " q]
+  d+
+  u.I[q]
+ (u.D["."]
+  u.I[" fractional_part: " q]
+  d+
+  u.I[q])?
+  u.I["}"]
+  u.I[" units: " q]
+  u.D[" "*]  # We allow spaces between the number and the measure.
+  measures
+  u.I[q]
+  u.I["}"]
+;
+
+export MEASURE = Optimize[measure];

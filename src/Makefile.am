@@ -1,2 +1,3 @@
-SUBDIRS = proto include lib
+SUBDIRS = proto include lib bin
+
 

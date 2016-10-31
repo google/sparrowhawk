@@ -180,9 +180,9 @@ message Date {
 message Money {
   required Decimal amount = 1;   // The amount of money
   optional int64 quantity = 2;   // Optional million/billion etc, as an integer
-  // lowercase ISO4217 currency code, e.g. "usd"
+  // Lowercase ISO4217 currency code, e.g. "usd".
   // List of minimally supported set of currencies:
-  // kestrel_grammar/verbalize/universal/money_definition.txt
+  // grammars/verbalize/universal/money_definition.txt
   required string currency = 3;
   optional int32 style = 4  [deprecated = true];
   optional string morphosyntactic_features = 5;

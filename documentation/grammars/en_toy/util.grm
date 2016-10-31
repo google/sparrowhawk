@@ -1,0 +1,15 @@
+import '../byte.grm' as b;
+
+func I[expr] {
+  return "" : expr;
+}
+
+func D[expr] {
+  return expr : "";
+}
+
+export q = "\"";
+
+# Allows for arbitrary numbers of spaces on the verbalization side between
+# elements of the semiotic class.
+export s = " "*;

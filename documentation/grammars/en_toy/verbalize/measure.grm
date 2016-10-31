@@ -1,0 +1,44 @@
+import '../byte.grm' as b;
+import '../util.grm' as u;
+import 'numbers.grm' as n;
+
+# Except with exactly 1, the plural form is used, so we map to that form, and
+# then singularize below.
+measures =
+    ("centimeter" : "centimeters")
+  | ("kilogram" : "kilograms")
+  | ("degree" : "degrees")
+;
+
+# quotation mark
+q = u.q;
+
+# Used to allow for different numbers of spaces coming out of the serializer.
+s = u.s;
+
+# Removes the markup (allowing for various spacing possibilities in the
+# serialization) and verbalizes the remainder.
+measure =
+  u.D["measure" s "{" s]
+  u.D[s "decimal" s "{" s]
+  u.D["integer_part:" s q]
+  n.CARDINAL
+  u.D[q]
+ (u.D[s "fractional_part:" s q]
+  u.I[" point "]
+  n.DIGITS
+  u.D[q])?
+  u.D[s "}" s]
+  u.D[s "units:" s q]
+  u.I[" "]
+  measures
+  u.D[q]
+  u.D[s "}" s]
+;
+
+sigstar = b.kBytes*;
+
+# Uses the singular form after exactly "one".
+singularize = CDRewrite[Invert[measures], "[BOS]one ", "", sigstar];
+
+export MEASURE = Optimize[measure @ singularize];

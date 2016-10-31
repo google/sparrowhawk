@@ -1,0 +1,42 @@
+import '../byte.grm' as b;
+import '../util.grm' as u;
+import 'numbers.grm' as n;
+
+q = u.q;
+
+# Used to allow for different numbers of spaces coming out of the serializer.
+s = u.s;
+
+d = b.kDigit;
+
+hour = (u.D["0"]? d | (d - "0") d) @ n.CARDINAL;
+
+sigstar = b.kBytes*;
+
+# Various renditions of minutes:
+#
+# 03 -> oh three
+# 13 -> thirteen
+# 00 -> o'clock
+#
+# Note that trailing 0 is removed so that 3:03 comes in as
+#
+# hours: 3 minutes: 3
+minute =
+  (  (("" : "oh ") (d @ n.CARDINAL))
+   | (d d) @ n.CARDINAL)
+   @ CDRewrite["oh zero" : "o'clock", "", "", sigstar];
+
+# Removes the markup (allowing for various spacing possibilities in the
+# serialization) and verbalizes the remainder.
+time =
+  u.D["time" s "{" s]
+  u.D["hours:" s]
+  hour
+  u.D[s "minutes:" s]
+  u.I[" "]
+  minute
+  u.D[s "}"]
+;
+
+export TIME = Optimize[time];
