@@ -57,7 +57,7 @@ class ProtobufSerializer {
 
  protected:
   typedef google::protobuf::FieldDescriptor FieldDescriptor;
-  typedef vector<const FieldDescriptor *> FieldDescriptorVector;
+  typedef std::vector<const FieldDescriptor *> FieldDescriptorVector;
   typedef fst::StateIterator<MutableTransducer> StateIterator;
   typedef fst::ArcIterator<MutableTransducer> ArcIterator;
   typedef MutableTransducer::Arc Arc;

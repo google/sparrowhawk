@@ -46,7 +46,7 @@ DEFINE_string(path_prefix, "./", "Optional path prefix if not relative.");
 
 void NormalizeInput(const string& input,
                     speech::sparrowhawk::Normalizer *normalizer) {
-  const vector<string> sentences = normalizer->SentenceSplitter(input);
+  const std::vector<string> sentences = normalizer->SentenceSplitter(input);
   for (const auto& sentence : sentences) {
     string output;
     normalizer->Normalize(sentence, &output);

@@ -237,6 +237,7 @@ dist_noinst_DATA = items.proto \
                    links.proto \
                    rule_order.proto \
                    semiotic_classes.proto \
+	           serialization_spec.proto \
                    sparrowhawk_configuration.proto
 
 CC_OUT = $(srcdir)/../lib
@@ -245,6 +246,7 @@ MOSTLYCLEANFILES = items.pb.h items.pb.cc \
                    links.pb.h links.pb.cc \
                    rule_order.pb.h rule_order.pb.cc \
                    semiotic_classes.pb.h semiotic_classes.pb.cc \
+	           serialization_spec.pb.h serialization_spec.pb.cc \
                    sparrowhawk_configuration.pb.h sparrowhawk_configuration.pb.cc
 
 all: all-am

@@ -21,14 +21,14 @@ using std::vector;
 namespace speech {
 namespace sparrowhawk {
 
-vector<string> SplitString(const string &s, const string &delims) {
+std::vector<string> SplitString(const string &s, const string &delims) {
   return SplitString(s, delims, false);
 }
 
-vector<string> SplitString(const string &s,
+std::vector<string> SplitString(const string &s,
                            const string &delims,
                            bool skip_empty) {
-  vector<string> out;
+  std::vector<string> out;
   if (s.empty()) {
     return out;
   }

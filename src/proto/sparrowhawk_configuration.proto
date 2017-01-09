@@ -31,4 +31,8 @@ message SparrowhawkConfiguration {
   // marker that should *not* usually induce an end-of-sentence decision
   // e.g. “Mr.”
   optional string sentence_boundary_exceptions_file = 4;
+
+  // Optional file with SerializeSpec for verbalizer as a text proto. If the
+  // the field is not set, we resort to protobuf serializer.
+  optional string serialization_spec = 5;
 }

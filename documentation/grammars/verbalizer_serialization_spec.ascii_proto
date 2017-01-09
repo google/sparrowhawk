@@ -1,0 +1,84 @@
+class_spec {
+  semiotic_class: "measure"
+  style_spec {
+    record_spec {
+      field_path: "measure.decimal.integer_part"
+    }
+    record_spec {
+      field_path: "measure.decimal.fractional_part"
+    }
+    record_spec {
+      field_path: "measure.units"
+    }
+    required_fields: "measure.decimal.integer_part"
+  }
+}
+class_spec {
+  semiotic_class: "money"
+  style_spec {
+    record_spec {
+      field_path: "money.amount.integer_part"
+      suffix_spec {
+        field_path: "money.currency"
+      }
+    }
+    record_spec {
+      field_path: "money.amount.fractional_part"
+      suffix_spec {
+        field_path: "money.currency"
+      }
+    }
+  }
+}
+class_spec {
+  semiotic_class: "cardinal"
+  style_spec {
+    record_spec {
+      field_path: "cardinal.integer"
+    }
+  }
+}
+class_spec {
+  semiotic_class: "time"
+  style_spec {
+    record_spec {
+      field_path: "time.hours"
+    }
+    record_spec {
+      field_path: "time.minutes"
+    }
+  }
+}
+class_spec {
+  semiotic_class: "date"
+  style_spec {
+    record_spec {
+      field_path: "date.day"
+    }
+    record_spec {
+      field_path: "date.month"
+    }
+    record_spec {
+      field_path: "date.year"
+    }
+  }
+  style_spec {
+    record_spec {
+      field_path: "date.month"
+    }
+    record_spec {
+      field_path: "date.day"
+    }
+    record_spec {
+      field_path: "date.year"
+    }
+  }
+}
+class_spec {
+  semiotic_class: "verbatim"
+  style_spec {
+    record_spec {
+      field_path: "verbatim"
+    }
+  }
+}

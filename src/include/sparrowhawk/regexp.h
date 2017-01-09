@@ -38,9 +38,9 @@ struct RegMatch {
   int n_sub;
   int len;
   // if the regexp contained subexpressions
-  vector<string> sub_str;
-  vector<int> sub_start;
-  vector<int> sub_end;
+  std::vector<string> sub_str;
+  std::vector<int> sub_start;
+  std::vector<int> sub_end;
 };
 
 class Regexp {
@@ -66,7 +66,7 @@ class Regexp {
   // Gets vector of start and end chars for all matching string parts
   // returns number of matches.  Fills the matches vector with RegMatch objects.
   int GetAllMatches(const string &input,
-                    vector<RegMatch> *matches) const;
+                    std::vector<RegMatch> *matches) const;
 
   // Accessor for boolean whether this has been successfully compiled
   bool ok() const;

@@ -1,4 +1,4 @@
-Sparrowhawk - Release 0.1
+Sparrowhawk - Release 1.0
 
 Sparrowhawk is an open-source implementation of Google's Kestrel text-to-speech
 text normalization system.  It follows the discussion of the Kestrel system as
@@ -33,6 +33,11 @@ INSTALLATION:
   Follow the generic GNU build system instructions in ./INSTALL.  We
   recommend configuring with --enable-static=no for faster
   compiles. 
+
+  NOTE: In some versions of Mac OS-X we have noticed a problem with configure
+  whereby it fails to find fst.h. If this occurs, try configuring as follows: 
+
+  CPPFLAGS=-I/usr/local/include LDFLAGS=-L/usr/local/lib ./configure
 
 USAGE:
   Assuming you've installed under the default /usr/local, the library will be

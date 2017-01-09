@@ -109,7 +109,7 @@ class ProtobufParser {
 
   // Records the field orders if there is a preserve_order field and it's true
   bool RecordFieldOrder(google::protobuf::Message *message,
-                        const vector<string> &field_order);
+                        const std::vector<string> &field_order);
 
   // Applies fixes to the token names caused by lookahead FSTs.
   void FixLookahead(Utterance *utt);

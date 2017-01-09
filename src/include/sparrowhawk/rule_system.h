@@ -75,7 +75,7 @@ class RuleSystem {
   string grammar_name_;
   std::unique_ptr<GrmManager> grm_;
   // Precomputed lookahead transducers
-  mutable map<string, LookaheadFst*> lookaheads_;
+  mutable std::map<string, LookaheadFst*> lookaheads_;
 };
 
 }  // namespace sparrowhawk

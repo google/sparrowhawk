@@ -35,11 +35,12 @@ void protobuf_AssignDesc_sparrowhawk_5fconfiguration_2eproto() {
       "sparrowhawk_configuration.proto");
   GOOGLE_CHECK(file != NULL);
   SparrowhawkConfiguration_descriptor_ = file->message_type(0);
-  static const int SparrowhawkConfiguration_offsets_[4] = {
+  static const int SparrowhawkConfiguration_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SparrowhawkConfiguration, tokenizer_grammar_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SparrowhawkConfiguration, verbalizer_grammar_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SparrowhawkConfiguration, sentence_boundary_regexp_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SparrowhawkConfiguration, sentence_boundary_exceptions_file_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SparrowhawkConfiguration, serialization_spec_),
   };
   SparrowhawkConfiguration_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -83,11 +84,12 @@ void protobuf_AddDesc_sparrowhawk_5fconfiguration_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\037sparrowhawk_configuration.proto\022\022speec"
-    "h.sparrowhawk\"\236\001\n\030SparrowhawkConfigurati"
+    "h.sparrowhawk\"\272\001\n\030SparrowhawkConfigurati"
     "on\022\031\n\021tokenizer_grammar\030\001 \001(\t\022\032\n\022verbali"
     "zer_grammar\030\002 \001(\t\022 \n\030sentence_boundary_r"
     "egexp\030\003 \001(\t\022)\n!sentence_boundary_excepti"
-    "ons_file\030\004 \001(\t", 214);
+    "ons_file\030\004 \001(\t\022\032\n\022serialization_spec\030\005 \001"
+    "(\t", 242);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "sparrowhawk_configuration.proto", &protobuf_RegisterTypes);
   SparrowhawkConfiguration::default_instance_ = new SparrowhawkConfiguration();
@@ -109,6 +111,7 @@ const int SparrowhawkConfiguration::kTokenizerGrammarFieldNumber;
 const int SparrowhawkConfiguration::kVerbalizerGrammarFieldNumber;
 const int SparrowhawkConfiguration::kSentenceBoundaryRegexpFieldNumber;
 const int SparrowhawkConfiguration::kSentenceBoundaryExceptionsFileFieldNumber;
+const int SparrowhawkConfiguration::kSerializationSpecFieldNumber;
 #endif  // !_MSC_VER
 
 SparrowhawkConfiguration::SparrowhawkConfiguration()
@@ -131,6 +134,7 @@ void SparrowhawkConfiguration::SharedCtor() {
   verbalizer_grammar_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   sentence_boundary_regexp_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   sentence_boundary_exceptions_file_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  serialization_spec_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -150,6 +154,9 @@ void SparrowhawkConfiguration::SharedDtor() {
   }
   if (sentence_boundary_exceptions_file_ != &::google::protobuf::internal::kEmptyString) {
     delete sentence_boundary_exceptions_file_;
+  }
+  if (serialization_spec_ != &::google::protobuf::internal::kEmptyString) {
+    delete serialization_spec_;
   }
   if (this != default_instance_) {
   }
@@ -196,6 +203,11 @@ void SparrowhawkConfiguration::Clear() {
     if (has_sentence_boundary_exceptions_file()) {
       if (sentence_boundary_exceptions_file_ != &::google::protobuf::internal::kEmptyString) {
         sentence_boundary_exceptions_file_->clear();
+      }
+    }
+    if (has_serialization_spec()) {
+      if (serialization_spec_ != &::google::protobuf::internal::kEmptyString) {
+        serialization_spec_->clear();
       }
     }
   }
@@ -272,6 +284,23 @@ bool SparrowhawkConfiguration::MergePartialFromCodedStream(
         } else {
           goto handle_uninterpreted;
         }
+        if (input->ExpectTag(42)) goto parse_serialization_spec;
+        break;
+      }
+
+      // optional string serialization_spec = 5;
+      case 5: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_serialization_spec:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_serialization_spec()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->serialization_spec().data(), this->serialization_spec().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
         if (input->ExpectAtEnd()) return true;
         break;
       }
@@ -330,6 +359,15 @@ void SparrowhawkConfiguration::SerializeWithCachedSizes(
       4, this->sentence_boundary_exceptions_file(), output);
   }
 
+  // optional string serialization_spec = 5;
+  if (has_serialization_spec()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->serialization_spec().data(), this->serialization_spec().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      5, this->serialization_spec(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -378,6 +416,16 @@ void SparrowhawkConfiguration::SerializeWithCachedSizes(
         4, this->sentence_boundary_exceptions_file(), target);
   }
 
+  // optional string serialization_spec = 5;
+  if (has_serialization_spec()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->serialization_spec().data(), this->serialization_spec().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        5, this->serialization_spec(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -415,6 +463,13 @@ int SparrowhawkConfiguration::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->sentence_boundary_exceptions_file());
+    }
+
+    // optional string serialization_spec = 5;
+    if (has_serialization_spec()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->serialization_spec());
     }
 
   }
@@ -456,6 +511,9 @@ void SparrowhawkConfiguration::MergeFrom(const SparrowhawkConfiguration& from) {
     if (from.has_sentence_boundary_exceptions_file()) {
       set_sentence_boundary_exceptions_file(from.sentence_boundary_exceptions_file());
     }
+    if (from.has_serialization_spec()) {
+      set_serialization_spec(from.serialization_spec());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -483,6 +541,7 @@ void SparrowhawkConfiguration::Swap(SparrowhawkConfiguration* other) {
     std::swap(verbalizer_grammar_, other->verbalizer_grammar_);
     std::swap(sentence_boundary_regexp_, other->sentence_boundary_regexp_);
     std::swap(sentence_boundary_exceptions_file_, other->sentence_boundary_exceptions_file_);
+    std::swap(serialization_spec_, other->serialization_spec_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

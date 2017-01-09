@@ -24,7 +24,7 @@ using fst::LabelLookAheadRelabeler;
 using fst::StdArc;
 
 RuleSystem::~RuleSystem() {
-  map<string, LookaheadFst*>::iterator iter;
+  std::map<string, LookaheadFst*>::iterator iter;
   for (iter = lookaheads_.begin(); iter != lookaheads_.end(); iter++) {
     delete iter->second;
   }
@@ -89,7 +89,8 @@ bool RuleSystem::ApplyRules(const Transducer& input,
     bool success = true;
     if (parens_rule.empty()
         && use_lookahead) {
-      map<string, LookaheadFst*>::iterator iter = lookaheads_.find(rule_name);
+      std::map<string, LookaheadFst*>::iterator iter =
+          lookaheads_.find(rule_name);
       LookaheadFst *lookahead_rule_fst;
       if (iter == lookaheads_.end()) {
         const Transducer *rule_fst = grm_->GetFst(rule_name);

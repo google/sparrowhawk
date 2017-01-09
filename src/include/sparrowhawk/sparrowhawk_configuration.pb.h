@@ -140,6 +140,18 @@ class SparrowhawkConfiguration : public ::google::protobuf::Message {
   inline ::std::string* release_sentence_boundary_exceptions_file();
   inline void set_allocated_sentence_boundary_exceptions_file(::std::string* sentence_boundary_exceptions_file);
 
+  // optional string serialization_spec = 5;
+  inline bool has_serialization_spec() const;
+  inline void clear_serialization_spec();
+  static const int kSerializationSpecFieldNumber = 5;
+  inline const ::std::string& serialization_spec() const;
+  inline void set_serialization_spec(const ::std::string& value);
+  inline void set_serialization_spec(const char* value);
+  inline void set_serialization_spec(const char* value, size_t size);
+  inline ::std::string* mutable_serialization_spec();
+  inline ::std::string* release_serialization_spec();
+  inline void set_allocated_serialization_spec(::std::string* serialization_spec);
+
   // @@protoc_insertion_point(class_scope:speech.sparrowhawk.SparrowhawkConfiguration)
  private:
   inline void set_has_tokenizer_grammar();
@@ -150,6 +162,8 @@ class SparrowhawkConfiguration : public ::google::protobuf::Message {
   inline void clear_has_sentence_boundary_regexp();
   inline void set_has_sentence_boundary_exceptions_file();
   inline void clear_has_sentence_boundary_exceptions_file();
+  inline void set_has_serialization_spec();
+  inline void clear_has_serialization_spec();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -157,9 +171,10 @@ class SparrowhawkConfiguration : public ::google::protobuf::Message {
   ::std::string* verbalizer_grammar_;
   ::std::string* sentence_boundary_regexp_;
   ::std::string* sentence_boundary_exceptions_file_;
+  ::std::string* serialization_spec_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(4 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(5 + 31) / 32];
 
   friend void  protobuf_AddDesc_sparrowhawk_5fconfiguration_2eproto();
   friend void protobuf_AssignDesc_sparrowhawk_5fconfiguration_2eproto();
@@ -452,6 +467,76 @@ inline void SparrowhawkConfiguration::set_allocated_sentence_boundary_exceptions
   } else {
     clear_has_sentence_boundary_exceptions_file();
     sentence_boundary_exceptions_file_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// optional string serialization_spec = 5;
+inline bool SparrowhawkConfiguration::has_serialization_spec() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void SparrowhawkConfiguration::set_has_serialization_spec() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void SparrowhawkConfiguration::clear_has_serialization_spec() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void SparrowhawkConfiguration::clear_serialization_spec() {
+  if (serialization_spec_ != &::google::protobuf::internal::kEmptyString) {
+    serialization_spec_->clear();
+  }
+  clear_has_serialization_spec();
+}
+inline const ::std::string& SparrowhawkConfiguration::serialization_spec() const {
+  return *serialization_spec_;
+}
+inline void SparrowhawkConfiguration::set_serialization_spec(const ::std::string& value) {
+  set_has_serialization_spec();
+  if (serialization_spec_ == &::google::protobuf::internal::kEmptyString) {
+    serialization_spec_ = new ::std::string;
+  }
+  serialization_spec_->assign(value);
+}
+inline void SparrowhawkConfiguration::set_serialization_spec(const char* value) {
+  set_has_serialization_spec();
+  if (serialization_spec_ == &::google::protobuf::internal::kEmptyString) {
+    serialization_spec_ = new ::std::string;
+  }
+  serialization_spec_->assign(value);
+}
+inline void SparrowhawkConfiguration::set_serialization_spec(const char* value, size_t size) {
+  set_has_serialization_spec();
+  if (serialization_spec_ == &::google::protobuf::internal::kEmptyString) {
+    serialization_spec_ = new ::std::string;
+  }
+  serialization_spec_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* SparrowhawkConfiguration::mutable_serialization_spec() {
+  set_has_serialization_spec();
+  if (serialization_spec_ == &::google::protobuf::internal::kEmptyString) {
+    serialization_spec_ = new ::std::string;
+  }
+  return serialization_spec_;
+}
+inline ::std::string* SparrowhawkConfiguration::release_serialization_spec() {
+  clear_has_serialization_spec();
+  if (serialization_spec_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = serialization_spec_;
+    serialization_spec_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void SparrowhawkConfiguration::set_allocated_serialization_spec(::std::string* serialization_spec) {
+  if (serialization_spec_ != &::google::protobuf::internal::kEmptyString) {
+    delete serialization_spec_;
+  }
+  if (serialization_spec) {
+    set_has_serialization_spec();
+    serialization_spec_ = serialization_spec;
+  } else {
+    clear_has_serialization_spec();
+    serialization_spec_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   }
 }
 

@@ -284,12 +284,21 @@ BUILT_SOURCES = $(srcdir)/sparrowhawk/items.pb.h $(srcdir)/sparrowhawk/links.pb.
                 $(srcdir)/sparrowhawk/semiotic_classes.pb.h \
                 $(srcdir)/sparrowhawk/sparrowhawk_configuration.pb.h
 
-nobase_include_HEADERS = sparrowhawk/io_utils.h sparrowhawk/normalizer.h \
-                          sparrowhawk/protobuf_parser.h sparrowhawk/regexp.h \
-                          sparrowhawk/sentence_boundary.h sparrowhawk/logger.h \
-                          sparrowhawk/numbers.h sparrowhawk/protobuf_serializer.h \
-                          sparrowhawk/rule_system.h sparrowhawk/string_utils.h \
-                          $(BUILT_SOURCES)
+nobase_include_HEADERS = sparrowhawk/field_path.h \
+		          sparrowhawk/io_utils.h \
+		          sparrowhawk/logger.h \
+		          sparrowhawk/normalizer.h \
+		          sparrowhawk/numbers.h \
+		          sparrowhawk/protobuf_parser.h \
+		          sparrowhawk/protobuf_serializer.h \
+		          sparrowhawk/record_serializer.h \
+		          sparrowhawk/regexp.h \
+		          sparrowhawk/rule_system.h \
+		          sparrowhawk/sentence_boundary.h \
+		          sparrowhawk/spec_serializer.h \
+		          sparrowhawk/string_utils.h \
+		          sparrowhawk/style_serializer.h \
+		          $(BUILT_SOURCES)
 
 all: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) all-am
@@ -572,6 +581,9 @@ sparrowhawk/rule_order.pb.h:
 
 sparrowhawk/semiotic_classes.pb.h:
 	$(MAKE) -C $(srcdir)/../proto/ semiotic_classes.pb.h
+
+sparrowhawk/serialization_spec.pb.h:
+	$(MAKE) -C $(srcdir)/../proto/ serialization_spec.pb.h
 
 sparrowhawk/sparrowhawk_configuration.pb.h:
 	$(MAKE) -C $(srcdir)/../proto/ sparrowhawk_configuration.pb.h

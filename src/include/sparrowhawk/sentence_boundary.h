@@ -40,7 +40,7 @@ class SentenceBoundary {
   // differently.
   bool LoadSentenceBoundaryExceptions(const string &filename);
 
-  vector<string> ExtractSentences(const string &input_text) const;
+  std::vector<string> ExtractSentences(const string &input_text) const;
 
   // If true, then prefixes each exception in the exception list with a space,
   // so that it when matching against a potential end-of-sentence position, it
@@ -58,7 +58,7 @@ class SentenceBoundary {
   bool EvaluateCandidate(const string &input_text, const string &marker) const;
 
   std::unique_ptr<Regexp> regexp_;
-  vector<string> sentence_boundary_exceptions_;
+  std::vector<string> sentence_boundary_exceptions_;
   bool pad_exceptions_with_space_prefix_;
   DISALLOW_COPY_AND_ASSIGN(SentenceBoundary);
 };

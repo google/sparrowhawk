@@ -139,7 +139,7 @@ bool ProtobufParser::ParseMessage(bool eof_allowed, Message *message) {
   const Reflection *reflection = message->GetReflection();
   string label;
   // Record of the order in which the fields came in
-  vector<string> field_order;
+  std::vector<string> field_order;
   while (true) {
     if (!ConsumeLabel(&label)) {
       if (eof_allowed) {
@@ -234,7 +234,7 @@ bool ProtobufParser::ParseQuotedFieldValue(bool ignore_backslashes,
 }
 
 bool ProtobufParser::RecordFieldOrder(Message *message,
-                                      const vector<string> &field_order) {
+                                      const std::vector<string> &field_order) {
   const Descriptor *descriptor = message->GetDescriptor();
   const Reflection *reflection = message->GetReflection();
   const FieldDescriptor *preserve_field =

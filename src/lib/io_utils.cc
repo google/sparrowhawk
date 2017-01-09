@@ -24,7 +24,7 @@ namespace speech {
 namespace sparrowhawk {
 
 string IOStream::LoadFileToString(const string &filename) {
-  ifstream strm(filename.c_str(), std::ios_base::in);
+  std::ifstream strm(filename.c_str(), std::ios_base::in);
   if (!strm) {
     LoggerFatal("Error opening file %s", filename.c_str());
   }

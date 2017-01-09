@@ -20,11 +20,13 @@ using std::string;
 #include <google/protobuf/text_format.h>
 #include <sparrowhawk/items.pb.h>
 #include <sparrowhawk/sentence_boundary.h>
+#include <sparrowhawk/serialization_spec.pb.h>
 #include <sparrowhawk/sparrowhawk_configuration.pb.h>
 #include <sparrowhawk/io_utils.h>
 #include <sparrowhawk/logger.h>
 #include <sparrowhawk/protobuf_parser.h>
 #include <sparrowhawk/protobuf_serializer.h>
+#include <sparrowhawk/spec_serializer.h>
 #include <sparrowhawk/string_utils.h>
 
 namespace speech {
@@ -69,6 +71,18 @@ bool Normalizer::Setup(const string &configuration_proto,
             configuration.sentence_boundary_exceptions_file())) {
       LoggerError("Cannot load sentence boundary exceptions file: %s",
                   configuration.sentence_boundary_exceptions_file().c_str());
+    }
+  }
+  if (configuration.has_serialization_spec()) {
+    string spec_string = IOStream::LoadFileToString(
+        pathname_prefix + "/" + configuration.serialization_spec());
+    SerializeSpec spec;
+    if (spec_string.empty() ||
+        !google::protobuf::TextFormat::ParseFromString(spec_string, &spec) ||
+        (spec_serializer_ = Serializer::Create(spec)) == nullptr) {
+      LoggerError("Failed to load a valid serialization spec from file: %s",
+                  configuration.serialization_spec().c_str());
+      return false;
     }
   }
   return true;
@@ -187,8 +201,12 @@ bool Normalizer::VerbalizeSemioticClass(const Token &markup,
   Token local(markup);
   CleanFields(&local);
   MutableTransducer input_fst;
-  ProtobufSerializer serializer(&local, &input_fst);
-  serializer.SerializeToFst();
+  if (spec_serializer_ == nullptr) {
+    ProtobufSerializer serializer(&local, &input_fst);
+    serializer.SerializeToFst();
+  } else {
+    input_fst = spec_serializer_->Serialize(local);
+  }
   if (!verbalizer_rules_->ApplyRules(input_fst,
                                      words,
                                      false /* use_lookahead */)) {
@@ -198,7 +216,7 @@ bool Normalizer::VerbalizeSemioticClass(const Token &markup,
   return true;
 }
 
-vector<string> Normalizer::SentenceSplitter(const string &input) const {
+std::vector<string> Normalizer::SentenceSplitter(const string &input) const {
   return sentence_boundary_->ExtractSentences(input);
 }
 

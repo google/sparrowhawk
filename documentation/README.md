@@ -357,6 +357,77 @@ the token as a sequence of characters:
 3_character :_character 3_character 0_character
 </pre>
 
+### Verbalizer grammars: new serialization format (Sparrowhawk 1.0 and above)
+
+With Sparrowhawk 1.0, we introduce a simpler format for verbalizer
+grammars. The upside of this is that it makes writing the verbalizer grammars
+quite a bit simpler. The downside is that it requires a serialization
+specification proto instance (see below). This new format has no relevance to
+the classifier grammars, which should be written as described above in any case.
+
+The main salient differences between the previous format and the new
+serialization format are first that the representation that is passed by the
+serialization to the verbalizer is more compact. Instead of
+
+<pre>
+money { amount { integer_part: "3" } currency: "usd" }
+</pre>
+
+what gets passed is
+
+<pre>
+money|integer_part:3|currency:usd|
+</pre>
+
+For both major and minor currencies the verbalizer sees, e.g.:
+
+<pre>
+money|integer_part:3|currency:usd|fractional_part:50|currency:usd|
+</pre>
+
+The second major difference is that a REDUP rule is no longer needed. Rather the
+serialization, and possible copying of elements is done in code, controlled by
+the serialization specification, itself an ASCII protocol buffer representation
+that is referenced by an additional optional specification in the Sparrowhawk
+configuration file. An example is given in
+"verbalizer&#x005f;serialization&#x005f;spec.ascii&#x005f;proto". This specifies
+the serialization possibilities for the different classes. For money, the
+specification:
+
+<pre>
+class_spec {
+  semiotic_class: "money"
+  style_spec {
+    record_spec {
+      field_path: "money.amount.integer_part"
+      suffix_spec {
+        field_path: "money.currency"
+      }
+    }
+    record_spec {
+      field_path: "money.amount.fractional_part"
+      suffix_spec {
+        field_path: "money.currency"
+      }
+    }
+  }
+}
+</pre>
+
+means that the integer part of the money expression and the fractional part are
+verbalized in that order, and the repetition of the "money.currency" field has
+the effect of duplicating the expression for the currency itself. Again, the
+verbalizer grammar is responsible for determining that the first instance would
+be read as the major currency expression, and the second as the minor currency
+expression.
+
+The protocol buffer definition of the serialization specification is found in
+"src/proto/serialization&#x005f;spec.proto", which is also documented with
+comments on the functions of the various fields.
+
+The parallel English toy grammar in the new serializer format can be found in
+"grammars/en&#x005f;toy/verbalize&#x005f;serialization".
+
 ### Sentence boundary detection
 
 Sparrowhawk provides some simple support for sentence boundary detection. One
@@ -454,6 +525,12 @@ For example in the "grammars" directory, assuming one has built all the grammars
 normalizer_main --config=sparrowhawk_configuration.ascii_proto --multi_line_text < test.txt  2>/dev/null
 </pre>
 
+For the new serialization specification, the invocation is as follows:
+
+<pre>
+normalizer_main --config=sparrowhawk_configuration_serialization.ascii_proto --multi_line_text < test.txt 2>/dev/null
+</pre>
+
 Integrating Sparrowhawk with Festival
 -------------------------
 
@@ -509,7 +586,7 @@ festival/examples/sparrowhawk_test_us_null.scm
 Sparrowhawk will perform tokenization and text normalization and leave you with
 a sequence of words in Festival's 'Word' relation. You need to take it from
 there.
- 
+
 How to cite Sparrowhawk
 -------------------------
 

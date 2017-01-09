@@ -1,0 +1,101 @@
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// Copyright 2015 and onwards Google, Inc.
+// Proto messages describing specifications for serializing semiotic classes.
+// These serializations determine the input to the verbalization grammars.
+// TODO(drasha) consider changing the name to serialize_spec.proto for
+// consistency.
+
+syntax = "proto2";
+
+package speech.sparrowhawk;
+
+// Specification for serializing a sub-part of a semiotic class. RecordSpecs may
+// be simple, such as a single field, or recursively combine additional
+// RecordSpecs to specify more elaborate formats.
+// For a repeated scalar field, we simply serialize all the values in the
+// token for this field in an identical fashion, respecting the original
+// order.
+// NB. Assumes there are no repeated embedded messages in semiotic_classes.proto
+message RecordSpec {
+  // The serialization for these RecordSpecs will be emitted prior to every
+  // instance of the main field for this spec.
+  repeated RecordSpec prefix_spec = 1;
+
+  // The serialization for these RecordSpecs will be emitted after every
+  // instance of the main field for this spec.
+  repeated RecordSpec suffix_spec = 2;
+
+  // Field serialization specification: the fields below are used to include a
+  // value from the input proto in the serialization. This record will only be
+  // included in the output serialization if this field is present in the input,
+  // a default value is supplied, or a one_of field is given.
+
+  // The path (from the top-level token, in proto_path.h format) to this field.
+  // If the label field is not set, the terminal portion of this will be used as
+  // the label in the serialized output.
+  optional string field_path = 3;
+
+  // Defines the record label in the serialization. This should be set only to
+  // override the use of the terminal field name from the field path as the
+  // default label.
+  optional string label = 4;
+
+  // String defining the value to be used for the field in case it is not set.
+  // Note that prefix and suffix records with default values will not be
+  // serialized if the parent record is missing. The default value is
+  // well-defined only for singular fields and is ignored otherwise.
+  optional string default_value = 5;
+}
+
+// Specification for serializing a semiotic class in a particular style.
+// StyleSpecs provide required and prohibited fields to help determine the style
+// to be used for verbalization.
+message StyleSpec {
+  // Gives the specification for how tokens should be serialized in this style.
+  // The serialization components for this style will be emitted in the same
+  // order as the record specs in this field.
+  repeated RecordSpec record_spec = 1;
+
+  // When more than one serialization style is used for a semiotic class, it may
+  // be possible to infer that a serialization is inappropriate due to the
+  // presence or absence of a particular field. The following fields provide a
+  // mechanism to do this.
+
+  // This serialization will not be emitted unless all of the fields referred to
+  // here are present. A single instance can have multiple fields (separated by
+  // "|") from which at least one field is required for serialization.
+  repeated string required_fields = 2;
+
+  // This serialization will not be emitted if any of the fields referred to
+  // here are present.
+  repeated string prohibited_fields = 3;
+}
+
+// Specification of a serialization format for a particular semiotic class.
+message ClassSpec {
+  // Indicates the type of token that may be serialized by this spec: those with
+  // this field present, e.g. "cardinal" or "measure".
+  optional /* required */ string semiotic_class = 1;
+
+  // Denotes the style within the semiotic class. StyleSpecs augment ClassSpec
+  // by enabling multiple ways of verbalizing the same semiotic class.
+  repeated StyleSpec style_spec = 2;
+}
+
+// Collection of all serialization specs for a language. A single semiotic class
+// may have more than one specification, and all matching serializations for
+// that class will be included as paths in the output.
+message SerializeSpec {
+  repeated ClassSpec class_spec = 1;
+}

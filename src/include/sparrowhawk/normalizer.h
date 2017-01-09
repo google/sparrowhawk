@@ -36,6 +36,7 @@ using std::vector;
 #include <sparrowhawk/sentence_boundary.h>
 #include <sparrowhawk/sparrowhawk_configuration.pb.h>
 #include <sparrowhawk/rule_system.h>
+#include <sparrowhawk/spec_serializer.h>
 
 namespace speech {
 namespace sparrowhawk {
@@ -77,7 +78,7 @@ class Normalizer {
   // Preprocessor to use the sentence splitter to break up text into
   // sentences. An application would normally call this first, and then
   // normalize each of the resulting sentences.
-  vector<string> SentenceSplitter(const string &input) const;
+  std::vector<string> SentenceSplitter(const string &input) const;
 
  private:
   // normalizer.cc
@@ -139,7 +140,8 @@ class Normalizer {
   std::unique_ptr<RuleSystem> tokenizer_classifier_rules_;
   std::unique_ptr<RuleSystem> verbalizer_rules_;
   std::unique_ptr<SentenceBoundary> sentence_boundary_;
-  set<string> sentence_boundary_exceptions_;
+  std::unique_ptr<Serializer> spec_serializer_;
+  std::set<string> sentence_boundary_exceptions_;
 
   DISALLOW_COPY_AND_ASSIGN(Normalizer);
 };

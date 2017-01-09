@@ -1,8 +1,9 @@
-AC_INIT([Sparrowhawk], [0.1.0], [rws@google.com])
+AC_INIT([Sparrowhawk], [1.0.0], [rws@google.com])
 AM_INIT_AUTOMAKE([foreign nostdinc -Wall -Werror])
 
 AM_PROG_AR
 
+CPPFLAGS="$CPPFLAGS -funsigned-char"
 CXXFLAGS="$CXXFLAGS -std=c++11"
 
 AC_PROG_CXX

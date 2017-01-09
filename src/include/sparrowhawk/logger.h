@@ -18,6 +18,7 @@
 // TODO(rws): Write a more respectable logging system or link to some
 // open-source substitute.
 
+#include <fst/compat.h>
 namespace speech {
 namespace sparrowhawk {
 

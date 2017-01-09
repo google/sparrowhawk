@@ -1,0 +1,64 @@
+import '../byte.grm' as b;
+import '../util.grm' as u;
+import 'numbers.grm' as n;
+
+q = u.q;
+
+# Used to allow for different numbers of spaces coming out of the serializer.
+s = u.s;
+
+d = b.kDigit;
+
+currencies = StringFile['money.tsv'];
+
+# Simple currency amounts such as:
+# money { amount { integer_part: "3"} currency: "usd" }
+
+sigstar = b.kBytes*;
+
+# Rules to insert "_maj" and "_min" at the end of the currency terms.
+ins_maj = CDRewrite[u.I["_maj"], "", "[EOS]", sigstar];
+ins_min = CDRewrite[u.I["_min"], "", "[EOS]", sigstar];
+
+del_zero = CDRewrite[u.D["0"], "[BOS]", "", sigstar];
+
+# money { amount { integer_part: "3" fractional_part: "50"} currency: "usd" }
+# Here wa assume that the input has been reduplicated (see REDUP), and then on
+# the lefthand side we delete the minor currency and on the righthand side the
+# major currency. The reduplication is done IN CODE (see
+# RuleSystem::ApplyRules() in rule_system.cc).
+#
+# Removes the markup (allowing for various spacing possibilities in the
+# serialization) and verbalizes the remainder.
+
+money =
+  u.D["money"]
+  u.D["|integer_part:"]
+  n.CARDINAL
+  u.D["|currency:"]
+  u.I[" "]
+  (ins_maj @ currencies)
+ (u.I[" and "]
+  u.D["|fractional_part:"]
+  (del_zero @ n.CARDINAL)
+  u.D["|currency:"]
+  u.I[" "]
+  (ins_min @ currencies))?
+  u.D[s "|"]
+;
+
+# Singularize after "one" (as in measures).
+
+singulars =
+   ("dollars" : "dollar")
+ | ("cents" : "cent")
+ | ("pounds" : "pound")
+ | ("pence" : "penny")
+ | ("euros" : "euro")
+;
+
+singularize =
+  CDRewrite[singulars, "[BOS]one " | "and one ", "", sigstar]
+;
+
+export MONEY = Optimize[money @ singularize];

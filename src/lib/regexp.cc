@@ -85,7 +85,7 @@ bool Regexp::CheckMatch(const string &input, const string &pattern) {
 }
 
 int Regexp::GetAllMatches(const string &input,
-                          vector<RegMatch> *matches) const {
+                          std::vector<RegMatch> *matches) const {
   if (!ok()) {
     return 0;
   }

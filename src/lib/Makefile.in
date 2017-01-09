@@ -122,11 +122,13 @@ am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libsparrowhawk_la_LIBADD =
 am__objects_1 = items.pb.lo links.pb.lo rule_order.pb.lo \
-	semiotic_classes.pb.lo sparrowhawk_configuration.pb.lo
-am_libsparrowhawk_la_OBJECTS = io_utils.lo normalizer_utils.lo \
-	protobuf_parser.lo regexp.lo sentence_boundary.lo \
-	normalizer.lo numbers.lo protobuf_serializer.lo rule_system.lo \
-	string_utils.lo $(am__objects_1)
+	semiotic_classes.pb.lo serialization_spec.pb.lo \
+	sparrowhawk_configuration.pb.lo
+am_libsparrowhawk_la_OBJECTS = field_path.lo io_utils.lo normalizer.lo \
+	normalizer_utils.lo numbers.lo protobuf_parser.lo \
+	protobuf_serializer.lo record_serializer.lo regexp.lo \
+	rule_system.lo sentence_boundary.lo spec_serializer.lo \
+	string_utils.lo style_serializer.lo $(am__objects_1)
 libsparrowhawk_la_OBJECTS = $(am_libsparrowhawk_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -325,18 +327,23 @@ proto_sources = items.pb.cc \
                 links.pb.cc \
                 rule_order.pb.cc \
                 semiotic_classes.pb.cc \
+                serialization_spec.pb.cc \
                 sparrowhawk_configuration.pb.cc
 
-libsparrowhawk_la_SOURCES = io_utils.cc \
-                            normalizer_utils.cc \
-                            protobuf_parser.cc \
-                            regexp.cc \
-                            sentence_boundary.cc \
+libsparrowhawk_la_SOURCES = field_path.cc \
+                            io_utils.cc \
                             normalizer.cc \
+                            normalizer_utils.cc \
                             numbers.cc \
+                            protobuf_parser.cc \
                             protobuf_serializer.cc \
+                            record_serializer.cc \
+                            regexp.cc \
                             rule_system.cc \
+                            sentence_boundary.cc \
+                            spec_serializer.cc \
                             string_utils.cc \
+                            style_serializer.cc \
 			    $(proto_sources)
 
 libsparrowhawk_la_LDFLAGS = -version-info 0:0:0
@@ -419,6 +426,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/field_path.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/io_utils.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/items.pb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/links.pb.Plo@am__quote@
@@ -427,13 +435,17 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/numbers.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/protobuf_parser.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/protobuf_serializer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/record_serializer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/regexp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rule_order.pb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/rule_system.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/semiotic_classes.pb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sentence_boundary.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/serialization_spec.pb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sparrowhawk_configuration.pb.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spec_serializer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/string_utils.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/style_serializer.Plo@am__quote@
 
 .cc.o:
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -680,6 +692,9 @@ rule_order.pb.cc:
 
 semiotic_classes.pb.cc:
 	$(MAKE) -C $(srcdir)/../proto/ semiotic_classes.pb.cc
+
+serialization_spec.pb.cc:
+	$(MAKE) -C $(srcdir)/../proto/ serialization_spec.pb.cc
 
 sparrowhawk_configuration.pb.cc:
 	$(MAKE) -C $(srcdir)/../proto/ sparrowhawk_configuration.pb.cc

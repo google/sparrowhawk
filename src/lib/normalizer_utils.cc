@@ -75,7 +75,7 @@ Word* Normalizer::AddWord(Utterance* utt,
 
 Word* Normalizer::AddWords(Utterance* utt, Token* token,
                            const string& words) const {
-  vector<string> word_names = SplitString(words, " \t\n");
+  std::vector<string> word_names = SplitString(words, " \t\n");
   Word* word = NULL;
 
   for (int i = 0; i < word_names.size(); ++i) {

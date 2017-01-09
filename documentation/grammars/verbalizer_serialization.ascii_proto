@@ -1,0 +1,5 @@
+grammar_file: "en_toy/verbalize_serialization/verbalize.far"
+
+grammar_name: "Verbalizer"
+
+rules { main: "ALL" }

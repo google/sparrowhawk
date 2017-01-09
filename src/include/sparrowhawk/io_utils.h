@@ -18,6 +18,7 @@
 #include <string>
 using std::string;
 
+#include <fst/compat.h>
 namespace speech {
 namespace sparrowhawk {
 

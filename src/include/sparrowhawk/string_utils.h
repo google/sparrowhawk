@@ -20,14 +20,15 @@ using std::string;
 #include <vector>
 using std::vector;
 
+#include <fst/compat.h>
 namespace speech {
 namespace sparrowhawk {
 
 // Splits string s by sep and returns a vector of strings.
-vector<string> SplitString(const string &s, const string &delims);
+std::vector<string> SplitString(const string &s, const string &delims);
 
 // Splits string s by sep and returns a vector of strings, skipping empties.
-vector<string> SplitString(const string &s,
+std::vector<string> SplitString(const string &s,
                            const string &delims,
                            bool skip_empty);
 

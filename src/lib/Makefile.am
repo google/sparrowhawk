@@ -6,19 +6,25 @@ proto_sources = items.pb.cc \
                 links.pb.cc \
                 rule_order.pb.cc \
                 semiotic_classes.pb.cc \
+                serialization_spec.pb.cc \
                 sparrowhawk_configuration.pb.cc
 
-libsparrowhawk_la_SOURCES = io_utils.cc \
-                            normalizer_utils.cc \
-                            protobuf_parser.cc \
-                            regexp.cc \
-                            sentence_boundary.cc \
+libsparrowhawk_la_SOURCES = field_path.cc \
+                            io_utils.cc \
                             normalizer.cc \
+                            normalizer_utils.cc \
                             numbers.cc \
+                            protobuf_parser.cc \
                             protobuf_serializer.cc \
+                            record_serializer.cc \
+                            regexp.cc \
                             rule_system.cc \
+                            sentence_boundary.cc \
+                            spec_serializer.cc \
                             string_utils.cc \
+                            style_serializer.cc \
 			    $(proto_sources)
+
 libsparrowhawk_la_LDFLAGS = -version-info 0:0:0
 
 items.pb.cc:
@@ -32,6 +38,9 @@ rule_order.pb.cc:
 
 semiotic_classes.pb.cc:
 	$(MAKE) -C $(srcdir)/../proto/ semiotic_classes.pb.cc
+
+serialization_spec.pb.cc:
+	$(MAKE) -C $(srcdir)/../proto/ serialization_spec.pb.cc
 
 sparrowhawk_configuration.pb.cc:
 	$(MAKE) -C $(srcdir)/../proto/ sparrowhawk_configuration.pb.cc

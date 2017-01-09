@@ -37,7 +37,7 @@ SentenceBoundary::SentenceBoundary(const string &regexp) :
 
 bool SentenceBoundary::LoadSentenceBoundaryExceptions(const string &filename) {
   string raw = IOStream::LoadFileToString(filename);
-  vector<string> tokens = SplitString(raw, "\n", true /* skip_empty */);
+  std::vector<string> tokens = SplitString(raw, "\n", true /* skip_empty */);
   for (auto token : tokens) {
     token = StripWhitespace(token);
     // Having it as an unordered list is of course not very efficient for
@@ -53,11 +53,11 @@ bool SentenceBoundary::LoadSentenceBoundaryExceptions(const string &filename) {
   return true;
 }
 
-vector<string> SentenceBoundary::ExtractSentences(
+std::vector<string> SentenceBoundary::ExtractSentences(
     const string &input_text) const {
-  vector<RegMatch> potentials;
+  std::vector<RegMatch> potentials;
   regexp_->GetAllMatches(input_text, &potentials);
-  vector<int> cutpoints;
+  std::vector<int> cutpoints;
   int last = 0, i;
   for (i = 0; i < potentials.size(); ++i) {
     const int start = potentials[i].start_char;
@@ -70,7 +70,7 @@ vector<string> SentenceBoundary::ExtractSentences(
       last = end;
     }
   }
-  vector<string> result;
+  std::vector<string> result;
   last = 0;
   string sentence;
   for (int i = 0; i < cutpoints.size(); ++i) {
