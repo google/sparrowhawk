@@ -1,6 +1,7 @@
 BUILT_SOURCES = $(srcdir)/sparrowhawk/items.pb.h $(srcdir)/sparrowhawk/links.pb.h \
                 $(srcdir)/sparrowhawk/rule_order.pb.h \
                 $(srcdir)/sparrowhawk/semiotic_classes.pb.h \
+                $(srcdir)/sparrowhawk/serialization_spec.pb.h \
                 $(srcdir)/sparrowhawk/sparrowhawk_configuration.pb.h
 
 nobase_include_HEADERS =  sparrowhawk/field_path.h \
