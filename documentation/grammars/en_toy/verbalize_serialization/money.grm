@@ -12,7 +12,7 @@ d = b.kDigit;
 currencies = StringFile['money.tsv'];
 
 # Simple currency amounts such as:
-# money|amount|integer_part:3|currency:usd|
+# money|integer_part:3|currency:usd|
 
 sigstar = b.kBytes*;
 
@@ -22,7 +22,7 @@ ins_min = CDRewrite[u.I["_min"], "", "[EOS]", sigstar];
 
 del_zero = CDRewrite[u.D["0"], "[BOS]", "", sigstar];
 
-# money|amount|integer_part:3|currency:usd|fractional_part:50|currency:usd|
+# money|integer_part:3|currency:usd|fractional_part:50|currency:usd|
 # Here wa assume that the input has been reduplicated (see REDUP), and then on
 # the lefthand side we delete the minor currency and on the righthand side the
 # major currency. The reduplication is done IN CODE (see
