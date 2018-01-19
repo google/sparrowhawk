@@ -21,3 +21,6 @@ Similarly in the verbalize directory:
 
 thraxmakedep verbalize.grm
 make
+
+And finally in the verbalize_serialization directory, do the same as above.
+
