@@ -489,7 +489,7 @@ rules { main: "TOKENIZE_AND_CLASSIFY" }
 </pre>
 
 The verbalizer configuration is similar, except that the rules can also contain
-a redup entry to specify REDUP rules as discussed above:
+a redup entry to specify REDUP rules as discussed above (for the old serialization version pre-1.0):
 
 <pre>
 grammar_file: "en_toy/verbalize/verbalize.far"
