@@ -15,4 +15,4 @@ chars = char (u.I[" "] char)*;
 
 # Removes the markup (allowing for various spacing possibilities in the
 # serialization) and verbalizes the remainder.
-export VERBATIM = Optimize[u.D["verbatim:" s q] chars u.D[q]];
+export VERBATIM = Optimize[u.D["verbatim|verbatim:" q?] chars u.D[q? "|"]];
